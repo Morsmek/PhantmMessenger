@@ -9,10 +9,17 @@ compose-compiler = "1.5.15"
 androidMinSdk = "26"
 androidTargetSdk = "35"
 androidCompileSdk = "35"
+lazysodium-java = "5.1.4"
+jna = "5.14.0"
+bouncycastle = "1.78.1"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+lazysodium-java = { module = "com.goterl:lazysodium-java", version.ref = "lazysodium-java" }
+jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
+bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+bouncycastle-bcpqc = { module = "org.bouncycastle:bcpqc-jdk18on", version.ref = "bouncycastle" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
