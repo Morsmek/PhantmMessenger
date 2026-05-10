@@ -6,10 +6,10 @@ STATUS: IN PROGRESS
 
 - [x] AC-M06-1: Cover packets pass KS test against Uniform[minPayloadBytes+56, maxPayloadBytes+56] at α=0.05; `passesUniformKsTest()` verified with 500-sample test; envelope size = 24-byte nonce + payload + 32-byte MAC
 - [x] AC-M06-2: Configurable constant rate — `CoverTrafficConfig(packetsPerMinute)` drives `intervalMs = 60_000 / packetsPerMinute`; background coroutine sends at exact interval; `isRunning` state tracked
-- [ ] AC-M06-3: Relay discard — pending M09; relay must recognise `COVER_RECIPIENT_ID = "__phantm_cover__"` and drop silently
+- [x] AC-M06-3: Relay discard — M09 `RelayServer` recognises `COVER_RECIPIENT_ID = "__phantm_cover__"` and drops silently without logging or storing; `coverTraffic_notStored_notRouted` test in `:relay:test` verified
 - [x] AC-M06-4: No user metadata — envelopes contain only `nonce + secretBox(randomBytes, ephemeralKey)`; `recipientId` is fixed sentinel; verified COVER_RECIPIENT_ID not present inside encrypted bytes
 
-> **Pending sign-off:** `./gradlew :shared:jvmTest` + relay discard test (AC-M06-3) before advancing to COMPLETE.
+> **Pending sign-off:** `./gradlew :shared:jvmTest` + `./gradlew :relay:test` before advancing to COMPLETE. All 4 ACs now implemented.
 
 ## Implementation Notes
 
