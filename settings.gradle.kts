@@ -18,3 +18,4 @@ rootProject.name = "PhantmMessenger"
 include(":shared")
 include(":androidApp")
 include(":relay")
+include(":integration-tests")
