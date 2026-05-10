@@ -4,6 +4,8 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.stagic.phantm.crypto.PublicKey
 import com.stagic.phantm.err
+import com.stagic.phantm.groups.GroupDao
+import com.stagic.phantm.groups.LocalGroup
 import com.stagic.phantm.ok
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -207,5 +209,77 @@ private fun Sessions.toLocalSession() = LocalSession(
     ephemeralPublicKey = PublicKey(ephemeral_public_key),
     chainKey = chain_key,
     messageIndex = message_index,
+    createdAtMs = created_at_ms,
+)
+
+// ── GroupDao ──────────────────────────────────────────────────────────────────
+
+internal class SqlDelightGroupDao(private val db: PhantmDatabase) : GroupDao {
+
+    override suspend fun insertGroup(group: LocalGroup): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching {
+                db.groupsQueries.insertGroup(
+                    id = group.id,
+                    name = group.name,
+                    key_version = group.keyVersion,
+                    group_key = group.groupKey,
+                    created_at_ms = group.createdAtMs,
+                )
+            }.fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun getGroupById(id: String): DbResult<LocalGroup> =
+        withContext(Dispatchers.Default) {
+            val row = db.groupsQueries.selectGroupById(id).executeAsOneOrNull()
+                ?: return@withContext DbError.NotFound.err()
+            row.toLocalGroup().ok()
+        }
+
+    override suspend fun updateGroupKey(groupId: String, newKey: ByteArray): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching {
+                db.groupsQueries.updateGroupKey(group_key = newKey, id = groupId)
+            }.fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun deleteGroup(id: String): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching { db.groupsQueries.deleteGroup(id) }
+                .fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun insertMember(groupId: String, memberId: String, joinedAtMs: Long): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching {
+                db.groupsQueries.insertMember(group_id = groupId, member_id = memberId, joined_at_ms = joinedAtMs)
+            }.fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun getMemberIds(groupId: String): DbResult<List<String>> =
+        withContext(Dispatchers.Default) {
+            runCatching {
+                db.groupsQueries.selectMembersByGroup(groupId).executeAsList()
+            }.fold(onSuccess = { it.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun removeMember(groupId: String, memberId: String): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching { db.groupsQueries.deleteMember(group_id = groupId, member_id = memberId) }
+                .fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+
+    override suspend fun removeAllMembers(groupId: String): DbResult<Unit> =
+        withContext(Dispatchers.Default) {
+            runCatching { db.groupsQueries.deleteAllMembers(groupId) }
+                .fold(onSuccess = { Unit.ok() }, onFailure = { DbError.Unknown(it).err() })
+        }
+}
+
+private fun Groups.toLocalGroup() = LocalGroup(
+    id = id,
+    name = name,
+    keyVersion = key_version,
+    groupKey = group_key,
     createdAtMs = created_at_ms,
 )
