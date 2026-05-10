@@ -1,7 +1,7 @@
 # M13 — UI
 
 **Status:** NOT STARTED
-**Dependencies:** ALL previous modules (M01–M12)
+**Dependencies:** ALL previous modules
 **Dependents:** M14 (Integration Tests)
 
 ---
