@@ -26,6 +26,7 @@ kotlin {
                 implementation(libs.jna)
                 implementation(libs.bouncycastle.bcprov)
                 implementation(libs.bouncycastle.bcpqc)
+                implementation(libs.ktor.client.okhttp)
             }
         }
         jvmMain.get().dependsOn(jvmAndroidMain)
@@ -35,10 +36,13 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.sqldelight.coroutines)
             implementation(libs.kotlinx.serialization.protobuf)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.websockets)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.ktor.client.mock)
         }
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
@@ -51,6 +55,7 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
