@@ -1,4 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Phantm</string>
+
+    <!-- Screen titles -->
+    <string name="screen_conversations">Conversations</string>
+    <string name="screen_settings">Settings</string>
+    <string name="screen_verify_contact">Verify %1$s</string>
+
+    <!-- E2E encryption status -->
+    <string name="e2e_verified">End-to-end encrypted · verified</string>
+    <string name="e2e_unverified">End-to-end encrypted · unverified</string>
+
+    <!-- Contact verification screen -->
+    <string name="verify_instruction">Scan this QR code with your contact's device or compare the fingerprint out-of-band to verify their identity.</string>
+    <string name="fingerprint_label">Ed25519 Public Key Fingerprint</string>
+    <string name="mark_verified">Mark as Verified</string>
+    <string name="contact_verified">Identity Verified</string>
+
+    <!-- Settings section headers -->
+    <string name="settings_section_transport">Transport</string>
+    <string name="settings_section_security">Security</string>
+
+    <!-- Settings toggle labels -->
+    <string name="setting_cover_traffic">Cover Traffic</string>
+    <string name="setting_cover_traffic_desc">Send constant-rate dummy packets to obscure message timing</string>
+    <string name="setting_mesh_networking">Mesh Networking</string>
+    <string name="setting_mesh_networking_desc">Enable offline peer-to-peer delivery via BLE / Wi-Fi Direct</string>
+    <string name="setting_decoy_mode">Decoy Mode</string>
+    <string name="setting_decoy_mode_desc">Present an empty app instance for plausible deniability</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_encrypted">End-to-end encrypted</string>
+    <string name="cd_conversation_row">Conversation with %1$s, %2$d unread messages</string>
+    <string name="cd_open_conversation">Open conversation with %1$s</string>
+    <string name="cd_unread_count">%1$d unread messages</string>
+    <string name="cd_my_message">Sent by me: %2$s</string>
+    <string name="cd_their_message">Received from %1$s: %2$s</string>
+    <string name="cd_fingerprint_qr">QR code of %1$s fingerprint</string>
+    <string name="cd_fingerprint_text">Fingerprint: %1$s</string>
+    <string name="cd_contact_verified">Contact identity verified</string>
+    <string name="cd_mark_verified_button">Mark contact as verified</string>
 </resources>

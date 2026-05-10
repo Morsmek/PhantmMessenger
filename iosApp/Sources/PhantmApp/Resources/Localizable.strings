@@ -1,0 +1,41 @@
+/* AC-M13-4: All user-visible strings externalized */
+
+/* Screen titles */
+"screen_conversations" = "Conversations";
+"screen_settings" = "Settings";
+"screen_verify_contact" = "Verify %@";
+
+/* E2E encryption status */
+"e2e_verified" = "End-to-end encrypted · verified";
+"e2e_unverified" = "End-to-end encrypted · unverified";
+
+/* Contact verification */
+"verify_instruction" = "Scan this QR code with your contact's device or compare the fingerprint out-of-band to verify their identity.";
+"fingerprint_label" = "Ed25519 Public Key Fingerprint";
+"mark_verified" = "Mark as Verified";
+"contact_verified" = "Identity Verified";
+
+/* Settings sections */
+"settings_section_transport" = "Transport";
+"settings_section_security" = "Security";
+
+/* Settings toggles */
+"setting_cover_traffic" = "Cover Traffic";
+"setting_cover_traffic_desc" = "Send constant-rate dummy packets to obscure message timing";
+"setting_mesh_networking" = "Mesh Networking";
+"setting_mesh_networking_desc" = "Enable offline peer-to-peer delivery via BLE / Wi-Fi Direct";
+"setting_decoy_mode" = "Decoy Mode";
+"setting_decoy_mode_desc" = "Present an empty app instance for plausible deniability";
+
+/* Accessibility content descriptions */
+"cd_back" = "Navigate back";
+"cd_encrypted" = "End-to-end encrypted";
+"cd_conversation_row" = "Conversation with %@, %d unread messages";
+"cd_open_conversation" = "Open conversation with %@";
+"cd_unread_count" = "%d unread messages";
+"cd_my_message" = "Sent by me: %@";
+"cd_their_message" = "Received from %1$@: %2$@";
+"cd_fingerprint_qr" = "QR code of %@ fingerprint";
+"cd_fingerprint_text" = "Fingerprint: %@";
+"cd_contact_verified" = "Contact identity verified";
+"cd_mark_verified_button" = "Mark contact as verified";

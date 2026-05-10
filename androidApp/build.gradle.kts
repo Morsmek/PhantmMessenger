@@ -41,7 +41,13 @@ android {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.compose.foundation)
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.activity.compose)
+    implementation(libs.zxing.core)
     implementation(libs.kotlinx.coroutines.android)
 }

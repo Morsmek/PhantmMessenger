@@ -3,25 +3,18 @@ package com.stagic.phantm.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.activity.enableEdgeToEdge
+import com.stagic.phantm.android.ui.PhantmNavGraph
+import com.stagic.phantm.android.ui.theme.PhantmTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            MaterialTheme {
-                Surface {
-                    PlaceholderScreen()
-                }
+            PhantmTheme {
+                PhantmNavGraph()
             }
         }
     }
-}
-
-@Composable
-private fun PlaceholderScreen() {
-    Text("Phantm — M13 UI not yet implemented")
 }
