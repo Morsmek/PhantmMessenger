@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+build/
+*.class
+*.jar
+*.war
+*.ear
+out/
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+local.properties
+
+# Kotlin/Native
+*.kexe
+*.dSYM
+
+# iOS
+iosApp/build/
+iosApp/*.xcworkspace/xcuserdata/
+Pods/
+
+# macOS
+.DS_Store
+
+# Keys and secrets — NEVER commit
+*.pem
+*.p12
+*.keystore
+keystore.properties
+google-services.json
+GoogleService-Info.plist
