@@ -1,0 +1,36 @@
+CREATE TABLE contacts (
+    id TEXT NOT NULL PRIMARY KEY,
+    display_name TEXT NOT NULL,
+    x25519_public_key BLOB NOT NULL,
+    ml_kem_public_key BLOB NOT NULL,
+    ed25519_public_key BLOB NOT NULL,
+    fingerprint TEXT NOT NULL,
+    verified INTEGER NOT NULL DEFAULT 0,
+    created_at_ms INTEGER NOT NULL
+);
+
+insert:
+INSERT OR REPLACE INTO contacts(id, display_name, x25519_public_key, ml_kem_public_key, ed25519_public_key, fingerprint, verified, created_at_ms)
+VALUES (:id, :display_name, :x25519_public_key, :ml_kem_public_key, :ed25519_public_key, :fingerprint, :verified, :created_at_ms);
+
+selectById:
+SELECT * FROM contacts WHERE id = :id;
+
+selectAll:
+SELECT * FROM contacts ORDER BY display_name ASC;
+
+update:
+UPDATE contacts
+SET display_name = :display_name,
+    x25519_public_key = :x25519_public_key,
+    ml_kem_public_key = :ml_kem_public_key,
+    ed25519_public_key = :ed25519_public_key,
+    fingerprint = :fingerprint,
+    verified = :verified
+WHERE id = :id;
+
+deleteById:
+DELETE FROM contacts WHERE id = :id;
+
+count:
+SELECT COUNT(*) FROM contacts;

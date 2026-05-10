@@ -1,0 +1,27 @@
+CREATE TABLE sessions (
+    id TEXT NOT NULL PRIMARY KEY,
+    contact_id TEXT NOT NULL REFERENCES contacts(id) ON DELETE CASCADE,
+    ephemeral_public_key BLOB NOT NULL,
+    chain_key BLOB NOT NULL,
+    message_index INTEGER NOT NULL DEFAULT 0,
+    created_at_ms INTEGER NOT NULL
+);
+
+insert:
+INSERT OR REPLACE INTO sessions(id, contact_id, ephemeral_public_key, chain_key, message_index, created_at_ms)
+VALUES (:id, :contact_id, :ephemeral_public_key, :chain_key, :message_index, :created_at_ms);
+
+selectById:
+SELECT * FROM sessions WHERE id = :id;
+
+selectByContact:
+SELECT * FROM sessions WHERE contact_id = :contact_id ORDER BY created_at_ms DESC;
+
+updateChainKey:
+UPDATE sessions SET chain_key = :chain_key, message_index = :message_index WHERE id = :id;
+
+deleteById:
+DELETE FROM sessions WHERE id = :id;
+
+deleteByContact:
+DELETE FROM sessions WHERE contact_id = :contact_id;

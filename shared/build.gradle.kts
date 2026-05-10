@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -31,6 +32,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.sqldelight.coroutines)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
@@ -38,6 +40,23 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.sqldelight.android)
+            implementation(libs.sqlcipher.android)
+            implementation(libs.androidx.sqlite)
+        }
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native)
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("PhantmDatabase") {
+            packageName.set("com.stagic.phantm.db")
         }
     }
 }

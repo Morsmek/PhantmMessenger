@@ -12,6 +12,8 @@ androidCompileSdk = "35"
 lazysodium-java = "5.1.4"
 jna = "5.14.0"
 bouncycastle = "1.78.1"
+sqlcipher-android = "4.5.4"
+androidx-sqlite = "2.4.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -21,6 +23,9 @@ lazysodium-java = { module = "com.goterl:lazysodium-java", version.ref = "lazyso
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 bouncycastle-bcpqc = { module = "org.bouncycastle:bcpqc-jdk18on", version.ref = "bouncycastle" }
+sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
+sqlcipher-android = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher-android" }
+androidx-sqlite = { module = "androidx.sqlite:sqlite-ktx", version.ref = "androidx-sqlite" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }

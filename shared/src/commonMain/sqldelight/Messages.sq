@@ -1,0 +1,31 @@
+CREATE TABLE messages (
+    id TEXT NOT NULL PRIMARY KEY,
+    conversation_id TEXT NOT NULL,
+    sender_id TEXT NOT NULL,
+    encrypted_payload BLOB NOT NULL,
+    timestamp_ms INTEGER NOT NULL,
+    delivery_status TEXT NOT NULL,
+    local_only INTEGER NOT NULL DEFAULT 0
+);
+
+insert:
+INSERT OR REPLACE INTO messages(id, conversation_id, sender_id, encrypted_payload, timestamp_ms, delivery_status, local_only)
+VALUES (:id, :conversation_id, :sender_id, :encrypted_payload, :timestamp_ms, :delivery_status, :local_only);
+
+selectById:
+SELECT * FROM messages WHERE id = :id;
+
+selectByConversation:
+SELECT * FROM messages WHERE conversation_id = :conversation_id ORDER BY timestamp_ms ASC;
+
+updateDeliveryStatus:
+UPDATE messages SET delivery_status = :delivery_status WHERE id = :id;
+
+deleteById:
+DELETE FROM messages WHERE id = :id;
+
+deleteByConversation:
+DELETE FROM messages WHERE conversation_id = :conversation_id;
+
+countByConversation:
+SELECT COUNT(*) FROM messages WHERE conversation_id = :conversation_id;
