@@ -27,6 +27,9 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Install SDK platform and build-tools
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | \
