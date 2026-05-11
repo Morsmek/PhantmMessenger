@@ -1,6 +1,6 @@
 pluginManagement {
     repositories {
-        if (System.getenv("ANDROID_HOME")?.isNotBlank() == true) google()
+        google()
         gradlePluginPortal()
         mavenCentral()
     }
@@ -8,7 +8,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        if (System.getenv("ANDROID_HOME")?.isNotBlank() == true) google()
+        google()
         mavenCentral()
     }
 }

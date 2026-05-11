@@ -34,16 +34,21 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      - name: Compile Android test APK (pre-check)
+        run: ./gradlew :shared:packageDebugAndroidTest --no-daemon --stacktrace
+
       - name: Run M03 Android SQLCipher instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 29
           arch: x86_64
           target: default
+          disable-animations: true
+          emulator-options: -no-snapshot-load -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: >
             ./gradlew :shared:connectedAndroidTest
             -Pandroid.testInstrumentationRunnerArguments.class=com.stagic.phantm.db.AndroidDatabaseTest
-            --no-daemon
+            --no-daemon --stacktrace
 
       - name: Upload test results
         if: always()
