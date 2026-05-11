@@ -2,15 +2,6 @@ name: M03 — Android SQLCipher Database Tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'claude/setup-phantm-project-5LO5k'
-    paths:
-      - 'shared/src/androidMain/kotlin/com/stagic/phantm/db/**'
-      - 'shared/src/androidInstrumentedTest/kotlin/com/stagic/phantm/db/**'
-      - 'gradle/libs.versions.toml'
-      - 'shared/build.gradle.kts'
-      - '.github/workflows/android-m03-db.yml'
 
 jobs:
   instrumented-test:

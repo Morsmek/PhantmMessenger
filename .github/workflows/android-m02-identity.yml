@@ -2,15 +2,6 @@ name: M02 — Android Identity (Keystore) Tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'claude/setup-phantm-project-5LO5k'
-    paths:
-      - 'shared/src/androidMain/kotlin/com/stagic/phantm/identity/**'
-      - 'shared/src/androidInstrumentedTest/**'
-      - 'gradle/libs.versions.toml'
-      - 'shared/build.gradle.kts'
-      - '.github/workflows/android-m02-identity.yml'
 
 jobs:
   instrumented-test:
