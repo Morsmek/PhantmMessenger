@@ -6,13 +6,9 @@ on:
     branches:
       - 'claude/setup-phantm-project-5LO5k'
     paths:
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
       - 'shared/src/androidMain/kotlin/com/stagic/phantm/db/**'
-      - 'shared/src/commonMain/sqldelight/**'
       - 'shared/src/androidInstrumentedTest/kotlin/com/stagic/phantm/db/**'
       - 'gradle/libs.versions.toml'
-      - 'shared/android-shared.gradle.kts'
       - 'shared/build.gradle.kts'
       - '.github/workflows/android-m03-db.yml'
 
@@ -28,6 +24,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | \
@@ -35,9 +34,6 @@ jobs:
           sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
 
       - uses: gradle/actions/setup-gradle@v4
-
-      - name: Compile Android test APK (pre-check)
-        run: ./gradlew :shared:packageDebugAndroidTest --no-daemon --stacktrace
 
       - name: Run M03 Android SQLCipher instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
