@@ -58,6 +58,13 @@ kotlin {
                 implementation(libs.sqlcipher.android)
                 implementation(libs.androidx.sqlite)
             }
+            val androidInstrumentedTest by getting {
+                dependencies {
+                    implementation(libs.androidx.test.runner)
+                    implementation(libs.androidx.test.ext.junit)
+                    implementation(libs.kotlinx.coroutines.test)
+                }
+            }
         }
         jvmMain.dependencies {
             implementation(libs.sqldelight.sqlite.driver)
