@@ -40,10 +40,10 @@ class CoverTrafficTest {
             impl.generateCoverEnvelope(config).bytes.size.toDouble()
         }
 
-        // Cover envelope = 24-byte nonce + secretBox ciphertext (payload + 32-byte MAC)
-        // so total = 24 + payloadSize + 32 = payloadSize + 56
-        val expectedMin = (config.minPayloadBytes + 56).toDouble()
-        val expectedMax = (config.maxPayloadBytes + 56).toDouble()
+        // Cover envelope = 24-byte nonce + secretBox ciphertext (payload + 16-byte MAC)
+        // so total = 24 + payloadSize + 16 = payloadSize + 40
+        val expectedMin = (config.minPayloadBytes + 40).toDouble()
+        val expectedMax = (config.maxPayloadBytes + 40).toDouble()
 
         assertTrue(
             passesUniformKsTest(sizes, expectedMin, expectedMax, alpha = 0.05),
@@ -54,8 +54,8 @@ class CoverTrafficTest {
 
     @Test
     fun allPacketSizesAreWithinConfiguredRange() {
-        val expectedMin = config.minPayloadBytes + 56 // nonce + MAC overhead
-        val expectedMax = config.maxPayloadBytes + 56
+        val expectedMin = config.minPayloadBytes + 40 // 24 nonce + 16 MAC
+        val expectedMax = config.maxPayloadBytes + 40
 
         repeat(200) {
             val size = impl.generateCoverEnvelope(config).bytes.size
@@ -163,7 +163,7 @@ class CoverTrafficTest {
         // Encrypted bytes must not equal the random plaintext (trivially true for secretBox)
         val envelope = impl.generateCoverEnvelope(config)
         // The first 24 bytes are the nonce; the rest is ciphertext + MAC
-        assertTrue(envelope.bytes.size > 56, "Envelope must have nonce + payload + MAC")
+        assertTrue(envelope.bytes.size > 40, "Envelope must have nonce + payload + MAC")
     }
 
     @Test
@@ -183,7 +183,7 @@ class CoverTrafficTest {
     @Test
     fun fixedSizeConfigProducesUniformSize() {
         val fixedConfig = CoverTrafficConfig(minPayloadBytes = 512, maxPayloadBytes = 512)
-        val expectedSize = 512 + 56 // 512 payload + 24 nonce + 32 MAC
+        val expectedSize = 512 + 40 // 512 payload + 24 nonce + 16 MAC
         repeat(20) {
             assertEquals(expectedSize, impl.generateCoverEnvelope(fixedConfig).bytes.size)
         }

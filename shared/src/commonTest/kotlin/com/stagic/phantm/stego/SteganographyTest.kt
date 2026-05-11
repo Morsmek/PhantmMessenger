@@ -129,7 +129,7 @@ class SteganographyTest {
         assertEquals(0x50.toByte(), stegoBytes[1], "Must be PNG magic byte 1")
 
         // No JPEG APP1 (EXIF) marker 0xFF 0xE1 in PNG output
-        val hasJpegApp1 = stegoBytes.zipWithNext().any { (a, b) ->
+        val hasJpegApp1 = stegoBytes.asList().zipWithNext().any { (a, b) ->
             a == 0xFF.toByte() && b == 0xE1.toByte()
         }
         assertFalse(hasJpegApp1, "Stego PNG output must not contain JPEG APP1/EXIF marker")

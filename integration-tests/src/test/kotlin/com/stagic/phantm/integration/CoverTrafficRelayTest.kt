@@ -9,6 +9,7 @@ import com.stagic.phantm.integration.helpers.InMemoryRelay
 import com.stagic.phantm.transport.TransportEnvelope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +32,7 @@ class CoverTrafficRelayTest {
     // ── AC-M14-4a: CoverTrafficManager generates and sends cover frames ────────
 
     @Test
-    fun coverTrafficManager_sendsFramesWithCoverRecipientId_relayDiscards() = runTest {
+    fun coverTrafficManager_sendsFramesWithCoverRecipientId_relayDiscards() = runBlocking {
         val crypto = createCryptoCore()
         val relay = InMemoryRelay()
         val aliceTransport = FakeTransportClient("alice", relay)
@@ -39,7 +40,7 @@ class CoverTrafficRelayTest {
 
         val coverManager = createCoverTrafficManager(crypto)
 
-        // 6000 ppm → 10ms interval; wait ~50ms for ≥3 packets
+        // 6000 ppm → 10ms interval; wait 150ms real time for ≥10 packets
         coverManager.start(aliceTransport, CoverTrafficConfig(
             packetsPerMinute = 6000,
             minPayloadBytes = 32,
@@ -47,7 +48,7 @@ class CoverTrafficRelayTest {
         ))
         assertTrue(coverManager.isRunning, "CoverTrafficManager must report isRunning = true")
 
-        delay(60)
+        delay(150)
         coverManager.stop()
         assertFalse(coverManager.isRunning, "CoverTrafficManager must report isRunning = false after stop()")
 

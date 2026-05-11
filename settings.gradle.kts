@@ -1,6 +1,6 @@
 pluginManagement {
     repositories {
-        google()
+        if (System.getenv("ANDROID_HOME")?.isNotBlank() == true) google()
         gradlePluginPortal()
         mavenCentral()
     }
@@ -8,7 +8,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        google()
+        if (System.getenv("ANDROID_HOME")?.isNotBlank() == true) google()
         mavenCentral()
     }
 }
@@ -16,6 +16,11 @@ dependencyResolutionManagement {
 rootProject.name = "PhantmMessenger"
 
 include(":shared")
-include(":androidApp")
 include(":relay")
 include(":integration-tests")
+
+// androidApp requires the Android SDK and AGP from Google Maven.
+// Include it only when ANDROID_HOME is set (full Android build / CI).
+if (System.getenv("ANDROID_HOME")?.isNotBlank() == true) {
+    include(":androidApp")
+}

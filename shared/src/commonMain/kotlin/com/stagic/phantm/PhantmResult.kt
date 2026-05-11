@@ -16,7 +16,7 @@ sealed class PhantmResult<out V, out E> {
         is Err -> this
     }
 
-    inline fun <T> flatMap(transform: (V) -> PhantmResult<T, E>): PhantmResult<T, E> = when (this) {
+    inline fun <T> flatMap(transform: (V) -> PhantmResult<T, @UnsafeVariance E>): PhantmResult<T, E> = when (this) {
         is Ok -> transform(value)
         is Err -> this
     }

@@ -2,7 +2,7 @@
 
 package com.stagic.phantm.mesh
 
-import kotlinx.serialization.ProtoNumber
+import kotlinx.serialization.protobuf.ProtoNumber
 import kotlinx.serialization.Serializable
 
 /**

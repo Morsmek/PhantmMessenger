@@ -1,6 +1,6 @@
 package com.stagic.phantm.protocol
 
-import kotlinx.serialization.ProtoNumber
+import kotlinx.serialization.protobuf.ProtoNumber
 import kotlinx.serialization.Serializable
 
 /** Plaintext message content. Serialized with protobuf and then encrypted inside [Envelope]. */

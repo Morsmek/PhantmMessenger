@@ -173,7 +173,7 @@ class MessageProtocolTest {
         val envelopeBytes = encrypt(p).copyOf()
         // Flip a byte somewhere in the middle of the serialized envelope
         val mid = envelopeBytes.size / 2
-        envelopeBytes[mid] = envelopeBytes[mid].xor(0xFF.toByte())
+        envelopeBytes[mid] = (envelopeBytes[mid].toInt() xor 0xFF).toByte()
         val result = decrypt(p, envelopeBytes)
         assertTrue(result.isErr(), "Tampered envelope must be rejected")
     }

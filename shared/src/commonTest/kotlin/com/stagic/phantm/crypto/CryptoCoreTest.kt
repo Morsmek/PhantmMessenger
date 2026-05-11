@@ -99,7 +99,7 @@ class CryptoCoreTest {
     fun secretBoxRejectsTamperedCiphertext() {
         val key = SecretKey(crypto.randomBytes(32))
         val encrypted = crypto.secretBox("secret".encodeToByteArray(), key)
-        val tampered = encrypted.ciphertext.copyOf().also { it[0] = it[0].xor(0xFF.toByte()) }
+        val tampered = encrypted.ciphertext.copyOf().also { it[0] = (it[0].toInt() xor 0xFF).toByte() }
         val result = crypto.secretBoxOpen(EncryptedData(encrypted.nonce, tampered), key)
         assertTrue(result.isErr(), "Tampered ciphertext must fail authentication")
     }
@@ -203,7 +203,7 @@ class CryptoCoreTest {
         val kp = crypto.generateEd25519KeyPair()
         val message = "Hello".encodeToByteArray()
         val sig = crypto.sign(message, kp.privateKey)
-        val tampered = sig.bytes.copyOf().also { it[0] = it[0].xor(0x01.toByte()) }
+        val tampered = sig.bytes.copyOf().also { it[0] = (it[0].toInt() xor 0x01).toByte() }
         val result = crypto.verify(message, Signature(tampered), kp.publicKey)
         assertTrue(result.isErr(), "Tampered signature must fail verification")
     }

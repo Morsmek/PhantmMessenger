@@ -5,7 +5,7 @@ import com.stagic.phantm.PhantmResult
 import com.stagic.phantm.crypto.createCryptoCore
 import com.stagic.phantm.db.LocalContact
 import com.stagic.phantm.db.PhantmDatabase
-import com.stagic.phantm.db.SqlDelightGroupDao
+import com.stagic.phantm.db.createGroupDao
 import com.stagic.phantm.groups.createGroupManager
 import com.stagic.phantm.identity.PlatformContext
 import com.stagic.phantm.identity.createIdentityManager
@@ -26,10 +26,10 @@ import kotlin.test.assertIs
  */
 class GroupMessageIntegrationTest {
 
-    private fun makeGroupDao(): SqlDelightGroupDao {
+    private fun makeGroupDao(): com.stagic.phantm.groups.GroupDao {
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         PhantmDatabase.Schema.create(driver)
-        return SqlDelightGroupDao(PhantmDatabase(driver))
+        return createGroupDao(PhantmDatabase(driver))
     }
 
     @Test
@@ -121,7 +121,7 @@ class GroupMessageIntegrationTest {
 
         // Alice encrypts a group message
         val plaintext = "Secret group message — E2E encrypted for all members!"
-        val payload = MessagePayload(type = MessageType.TEXT, text = plaintext, timestampMs = 1L)
+        val payload = MessagePayload(type = MessageType.TEXT, text = plaintext)
         val cipherResult = aliceMgr.encryptGroupMessage(groupId, payload)
         assertIs<PhantmResult.Ok<ByteArray>>(cipherResult)
         val cipherBytes = cipherResult.value

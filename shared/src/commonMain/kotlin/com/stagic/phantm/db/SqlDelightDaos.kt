@@ -214,6 +214,8 @@ private fun Sessions.toLocalSession() = LocalSession(
 
 // ── GroupDao ──────────────────────────────────────────────────────────────────
 
+fun createGroupDao(db: PhantmDatabase): GroupDao = SqlDelightGroupDao(db)
+
 internal class SqlDelightGroupDao(private val db: PhantmDatabase) : GroupDao {
 
     override suspend fun insertGroup(group: LocalGroup): DbResult<Unit> =

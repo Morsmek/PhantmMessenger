@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm")
     alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 dependencies {
@@ -19,6 +19,14 @@ dependencies {
     testImplementation(libs.jna)
 }
 
-tasks.test {
+tasks.named<Test>("test") {
     useJUnit()
+    // Add :shared jvmTest and :relay test compiled class directories so that
+    // AllModuleUnitTestsVerificationTest can locate test class files via Class.forName().
+    dependsOn(":shared:jvmTestClasses", ":relay:testClasses")
+    doFirst {
+        classpath = classpath +
+            project(":shared").tasks.getByName("compileTestKotlinJvm").outputs.files +
+            project(":relay").tasks.getByName("compileTestKotlin").outputs.files
+    }
 }

@@ -24,7 +24,7 @@ class FakeTransportClient(
 ) : TransportClient {
 
     private val _state = MutableStateFlow(ConnectionState.DISCONNECTED)
-    private val _incoming = MutableSharedFlow<TransportEnvelope>(extraBufferCapacity = 64)
+    private val _incoming = MutableSharedFlow<TransportEnvelope>(replay = 64)
 
     override val connectionState: StateFlow<ConnectionState> = _state.asStateFlow()
     override val incomingEnvelopes: Flow<TransportEnvelope> = _incoming.asSharedFlow()

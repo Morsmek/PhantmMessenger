@@ -2,7 +2,7 @@
 
 package com.stagic.phantm.protocol
 
-import kotlinx.serialization.ProtoNumber
+import kotlinx.serialization.protobuf.ProtoNumber
 import kotlinx.serialization.Serializable
 
 internal const val PROTOCOL_VERSION = 1

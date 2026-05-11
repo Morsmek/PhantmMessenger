@@ -8,6 +8,7 @@ import io.ktor.server.testing.testApplication
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readBytes
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.protobuf.ProtoBuf
 import kotlin.test.Test
@@ -37,25 +38,27 @@ class RelayServerTest {
         testApplication {
             application { configureRelay(registry, store) }
 
-            val bobJob = launch {
-                createClient { install(WebSockets) }.webSocket("/ws") {
-                    send(Frame.Binary(true, encode(RelayFrame("bob"))))
-                    val rf = decode((incoming.receive() as Frame.Binary).readBytes())
-                    bobReceived.complete(rf.envelopeBytes)
+            coroutineScope {
+                val bobJob = launch {
+                    createClient { install(WebSockets) }.webSocket("/ws") {
+                        send(Frame.Binary(true, encode(RelayFrame("bob"))))
+                        val rf = decode((incoming.receive() as Frame.Binary).readBytes())
+                        bobReceived.complete(rf.envelopeBytes)
+                    }
                 }
+
+                // Poll until Bob registers
+                while (!registry.isConnected("bob")) kotlinx.coroutines.delay(10)
+
+                // Alice sends to Bob
+                createClient { install(WebSockets) }.webSocket("/ws") {
+                    send(Frame.Binary(true, encode(RelayFrame("alice"))))
+                    send(Frame.Binary(true, encode(RelayFrame("bob", testPayload))))
+                }
+
+                assertContentEquals(testPayload, bobReceived.await())
+                bobJob.cancel()
             }
-
-            // Poll until Bob registers
-            while (!registry.isConnected("bob")) kotlinx.coroutines.delay(10)
-
-            // Alice sends to Bob
-            createClient { install(WebSockets) }.webSocket("/ws") {
-                send(Frame.Binary(true, encode(RelayFrame("alice"))))
-                send(Frame.Binary(true, encode(RelayFrame("bob", testPayload))))
-            }
-
-            assertContentEquals(testPayload, bobReceived.await())
-            bobJob.cancel()
         }
     }
 

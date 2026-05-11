@@ -25,7 +25,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 internal class JvmIdentityManager(
     private val crypto: CryptoCore,
-    storageDir: File = File(System.getProperty("java.io.tmpdir"), "phantm_identity_jvm_test"),
+    storageDir: File = java.nio.file.Files.createTempDirectory("phantm_identity_").toFile(),
 ) : IdentityManager {
 
     private val propsFile = storageDir.also { it.mkdirs() }.resolve("identity.properties")

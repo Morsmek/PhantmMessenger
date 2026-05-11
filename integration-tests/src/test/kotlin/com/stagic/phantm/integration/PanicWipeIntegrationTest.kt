@@ -81,7 +81,7 @@ class PanicWipeIntegrationTest {
         val aliceProtocol = createMessageProtocol(aliceCrypto)
         val sensitiveText = "Highly sensitive message — must be irrecoverable after wipe"
         val envelopeBytes = (aliceProtocol.encrypt(
-            payload = MessagePayload(type = MessageType.TEXT, text = sensitiveText, timestampMs = 1L),
+            payload = MessagePayload(type = MessageType.TEXT, text = sensitiveText),
             senderId = aliceId.id,
             recipientId = bobId.id,
             senderEd25519PrivKey = alicePrivKeys.ed25519PrivKey,

@@ -20,7 +20,7 @@ class ConnectionRegistry {
         sessions.remove(recipientId)
     }
 
-    fun isConnected(recipientId: String): Boolean = recipientId in sessions
+    fun isConnected(recipientId: String): Boolean = sessions.containsKey(recipientId)
 
     /**
      * Send [frameBytes] to [recipientId]'s live session.

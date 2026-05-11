@@ -1,10 +1,10 @@
 [versions]
 agp = "8.3.2"
-kotlin = "2.0.20"
+kotlin = "2.0.10"
 coroutines = "1.9.0"
 kotlinx-serialization = "1.7.3"
 ktor = "3.0.0"
-sqldelight = "2.0.2"
+sqldelight = "2.1.0"
 compose = "1.7.0"
 compose-compiler = "1.5.15"
 navigation = "2.8.0"
@@ -16,7 +16,7 @@ androidTargetSdk = "35"
 androidCompileSdk = "35"
 lazysodium-java = "5.1.4"
 jna = "5.14.0"
-bouncycastle = "1.78.1"
+bouncycastle = "1.79"
 sqlcipher-android = "4.5.4"
 androidx-sqlite = "2.4.0"
 
@@ -28,7 +28,6 @@ kotlinx-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-seria
 lazysodium-java = { module = "com.goterl:lazysodium-java", version.ref = "lazysodium-java" }
 jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 bouncycastle-bcprov = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
-bouncycastle-bcpqc = { module = "org.bouncycastle:bcpqc-jdk18on", version.ref = "bouncycastle" }
 sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqlcipher-android = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlcipher-android" }
 androidx-sqlite = { module = "androidx.sqlite:sqlite-ktx", version.ref = "androidx-sqlite" }
@@ -60,4 +59,5 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

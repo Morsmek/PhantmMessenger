@@ -1,16 +1,24 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.kotlinSerialization)
 }
 
+// Android targets require the Android SDK and AGP (com.android.library from Google Maven).
+// Apply the plugin and configure Android targets only when ANDROID_HOME is set.
+val androidSdkPresent = System.getenv("ANDROID_HOME")?.isNotBlank() == true
+if (androidSdkPresent) {
+    apply(plugin = libs.plugins.androidLibrary.get().pluginId)
+}
+
 kotlin {
     jvm()
-    androidTarget {
-        compilations.all {
-            compilerOptions.configure {
-                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    if (androidSdkPresent) {
+        androidTarget {
+            compilations.all {
+                compilerOptions.configure {
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+                }
             }
         }
     }
@@ -25,12 +33,10 @@ kotlin {
                 implementation(libs.lazysodium.java)
                 implementation(libs.jna)
                 implementation(libs.bouncycastle.bcprov)
-                implementation(libs.bouncycastle.bcpqc)
                 implementation(libs.ktor.client.okhttp)
             }
         }
         jvmMain.get().dependsOn(jvmAndroidMain)
-        androidMain.get().dependsOn(jvmAndroidMain)
 
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -44,14 +50,20 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.ktor.client.mock)
         }
-        androidMain.dependencies {
-            implementation(libs.kotlinx.coroutines.android)
-            implementation(libs.sqldelight.android)
-            implementation(libs.sqlcipher.android)
-            implementation(libs.androidx.sqlite)
+        if (androidSdkPresent) {
+            androidMain.get().dependsOn(jvmAndroidMain)
+            androidMain.dependencies {
+                implementation(libs.kotlinx.coroutines.android)
+                implementation(libs.sqldelight.android)
+                implementation(libs.sqlcipher.android)
+                implementation(libs.androidx.sqlite)
+            }
         }
         jvmMain.dependencies {
             implementation(libs.sqldelight.sqlite.driver)
+        }
+        jvmTest.dependencies {
+            implementation(kotlin("reflect"))
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
@@ -68,14 +80,6 @@ sqldelight {
     }
 }
 
-android {
-    namespace = "com.stagic.phantm.shared"
-    compileSdk = libs.versions.androidCompileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.androidMinSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
+if (androidSdkPresent) {
+    apply(from = "android-shared.gradle.kts")
 }

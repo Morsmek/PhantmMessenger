@@ -3,7 +3,7 @@
 package com.stagic.phantm.transport
 
 import com.stagic.phantm.PhantmResult
-import kotlinx.serialization.ProtoNumber
+import kotlinx.serialization.protobuf.ProtoNumber
 import kotlinx.serialization.Serializable
 
 /**

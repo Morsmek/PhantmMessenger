@@ -138,7 +138,7 @@ class MeshRouterTest {
         val carolMlKem = crypto.generateMlKem768KeyPair()
 
         val envelopeBytes = (protocol.encrypt(
-            payload = MessagePayload(type = MessageType.TEXT, text = "mesh test", timestampMs = 1L),
+            payload = MessagePayload(type = MessageType.TEXT, text = "mesh test"),
             senderId = "alice",
             recipientId = "carol",
             senderEd25519PrivKey = aliceEd25519.privateKey,

@@ -57,7 +57,7 @@ class AliceToBobIntegrationTest {
         // Alice encrypts a message for Bob
         val plaintext = "Hello Bob — this is an end-to-end encrypted message!"
         val envelopeBytes = (aliceProtocol.encrypt(
-            payload = MessagePayload(type = MessageType.TEXT, text = plaintext, timestampMs = 1_700_000_000_000L),
+            payload = MessagePayload(type = MessageType.TEXT, text = plaintext),
             senderId = aliceId.id,
             recipientId = bobId.id,
             senderEd25519PrivKey = alicePrivKeys.ed25519PrivKey,
@@ -106,7 +106,7 @@ class AliceToBobIntegrationTest {
 
         val aliceProtocol = createMessageProtocol(aliceCrypto)
         val envelopeBytes = (aliceProtocol.encrypt(
-            payload = MessagePayload(type = MessageType.TEXT, text = "Are you there?", timestampMs = 1L),
+            payload = MessagePayload(type = MessageType.TEXT, text = "Are you there?"),
             senderId = aliceId.id,
             recipientId = bobId.id,
             senderEd25519PrivKey = alicePrivKeys.ed25519PrivKey,

@@ -4,15 +4,15 @@ import com.goterl.lazysodium.LazySodiumJava
 import com.goterl.lazysodium.SodiumJava
 import com.goterl.lazysodium.interfaces.Box
 import com.goterl.lazysodium.interfaces.GenericHash
-import com.goterl.lazysodium.interfaces.ScalarMult
+import com.goterl.lazysodium.interfaces.DiffieHellman
 import com.goterl.lazysodium.interfaces.SecretBox
 import com.goterl.lazysodium.interfaces.Sign
 import com.stagic.phantm.err
 import com.stagic.phantm.ok
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMExtractor
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMGenerator
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyGenerationParameters
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyPairGenerator
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMKEMExtractor
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMKEMGenerator
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMParameters
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMPrivateKeyParameters
 import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters
@@ -56,14 +56,14 @@ internal class CryptoCoreImpl : CryptoCore {
     ): HybridKemResult {
         // X25519 half: ephemeral DH
         val ephKp = generateX25519KeyPair()
-        val x25519Secret = ByteArray(ScalarMult.BYTES)
+        val x25519Secret = ByteArray(DiffieHellman.SCALARMULT_BYTES)
         check(sodium.cryptoScalarMult(x25519Secret, ephKp.privateKey.bytes, recipientX25519Pub.bytes)) {
             "X25519 scalar mult failed"
         }
 
         // ML-KEM-768 half
         val mlKemPub = MLKEMPublicKeyParameters(MLKEMParameters.ml_kem_768, recipientMlKemPub.bytes)
-        val kemGen = MLKEMKEMGenerator(secureRandom)
+        val kemGen = MLKEMGenerator(secureRandom)
         val encapsulated = kemGen.generateEncapsulated(mlKemPub)
         val mlKemSecret = encapsulated.secret
         val mlKemCt = encapsulated.encapsulation
@@ -89,14 +89,14 @@ internal class CryptoCoreImpl : CryptoCore {
         mlKemPrivKey: PrivateKey,
     ): CryptoResult<SharedSecret> = runCatching {
         // X25519 half
-        val x25519Secret = ByteArray(ScalarMult.BYTES)
+        val x25519Secret = ByteArray(DiffieHellman.SCALARMULT_BYTES)
         check(sodium.cryptoScalarMult(x25519Secret, x25519PrivKey.bytes, ciphertext.x25519Ciphertext)) {
             "X25519 scalar mult failed during decapsulation"
         }
 
         // ML-KEM-768 half
         val mlKemPriv = MLKEMPrivateKeyParameters(MLKEMParameters.ml_kem_768, mlKemPrivKey.bytes)
-        val mlKemSecret = MLKEMKEMExtractor(mlKemPriv).extractSecret(ciphertext.mlKemCiphertext)
+        val mlKemSecret = MLKEMExtractor(mlKemPriv).extractSecret(ciphertext.mlKemCiphertext)
 
         val sharedKey = combineSecrets(x25519Secret, mlKemSecret)
 
@@ -167,8 +167,7 @@ internal class CryptoCoreImpl : CryptoCore {
 
     override fun sign(message: ByteArray, signingKey: PrivateKey): Signature {
         val sig = ByteArray(Sign.BYTES)
-        val sigLen = LongArray(1)
-        check(sodium.cryptoSignDetached(sig, sigLen, message, message.size.toLong(), signingKey.bytes)) {
+        check(sodium.cryptoSignDetached(sig, message, message.size.toLong(), signingKey.bytes)) {
             "Ed25519 sign failed"
         }
         return Signature(sig)
@@ -178,7 +177,7 @@ internal class CryptoCoreImpl : CryptoCore {
         val valid = sodium.cryptoSignVerifyDetached(
             signature.bytes,
             message,
-            message.size.toLong(),
+            message.size,
             verifyKey.bytes,
         )
         return if (valid) Unit.ok() else CryptoError.InvalidSignature.err()
@@ -186,16 +185,12 @@ internal class CryptoCoreImpl : CryptoCore {
 
     // ── Utilities ─────────────────────────────────────────────────────────────
 
-    override fun randomBytes(size: Int): ByteArray {
-        val buf = ByteArray(size)
-        sodium.randombytesBuf(buf, size)
-        return buf
-    }
+    override fun randomBytes(size: Int): ByteArray = sodium.randomBytesBuf(size)
 
     // ── Internal helpers ──────────────────────────────────────────────────────
 
     private fun normaliseSalt(salt: ByteArray): ByteArray {
-        if (salt.size in GenericHash.KEYBYTES_MIN..GenericHash.KEYBYTES_MAX) return salt
+        if (salt.size in GenericHash.BLAKE2B_KEYBYTES_MIN..GenericHash.KEYBYTES_MAX) return salt
         val out = ByteArray(GenericHash.KEYBYTES)
         salt.copyInto(out, 0, 0, minOf(salt.size, GenericHash.KEYBYTES))
         return out
