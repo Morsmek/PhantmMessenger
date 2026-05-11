@@ -6,6 +6,8 @@ on:
     branches:
       - 'claude/setup-phantm-project-5LO5k'
     paths:
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
       - 'shared/src/androidMain/kotlin/com/stagic/phantm/identity/**'
       - 'shared/src/androidInstrumentedTest/**'
       - 'gradle/libs.versions.toml'

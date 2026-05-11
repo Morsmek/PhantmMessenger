@@ -6,6 +6,8 @@ on:
     branches:
       - 'claude/setup-phantm-project-5LO5k'
     paths:
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
       - 'shared/src/androidMain/kotlin/com/stagic/phantm/db/**'
       - 'shared/src/commonMain/sqldelight/**'
       - 'shared/src/androidInstrumentedTest/kotlin/com/stagic/phantm/db/**'
