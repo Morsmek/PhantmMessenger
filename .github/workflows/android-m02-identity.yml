@@ -15,7 +15,6 @@ on:
 jobs:
   instrumented-test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -23,12 +22,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install SDK platform and build-tools
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       - name: Enable KVM
         run: |
