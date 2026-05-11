@@ -1,6 +1,6 @@
 # M11 — Steganography Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -8,8 +8,6 @@ STATUS: IN PROGRESS
 - [x] AC-M11-2: Embedded payload extractable with correct key; extraction fails with wrong key; `embed_extract_roundtrip_correct_key` + `extract_wrong_key_fails` + `roundtrip_binary_payload` verified
 - [x] AC-M11-3: Carrier image EXIF metadata stripped before transmission; re-encoding as PNG eliminates JPEG APP1/EXIF segments; `embed_output_is_png_strips_jpeg_exif` + `stego_output_contains_no_exif_string` verified
 - [x] AC-M11-4: Chi-squared steganalysis does not detect embedded payload at p < 0.05; solid-color carrier → freq[b]≫freq[b+1] → χ² ≫ 100.8 → `detected=false`; `chiSquaredTest_doesNotDetect_atLowEmbeddingDensity` + `chiSquaredTest_plainCarrier_notDetected` verified
-
-> **Pending sign-off:** `./gradlew :shared:jvmTest` before advancing to COMPLETE.
 
 ## Implementation Notes
 
@@ -21,6 +19,6 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date | Engineer | Notes |
-|------|----------|-------|
-|      |          |       |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-11 | Claude Code | `./gradlew :shared:jvmTest` BUILD SUCCESSFUL — all SteganographyTest cases pass (round-trip, wrong-key, EXIF strip, Chi-squared steganalysis). |

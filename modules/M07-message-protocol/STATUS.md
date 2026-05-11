@@ -1,6 +1,6 @@
 # M07 — Message Protocol Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -10,8 +10,6 @@ STATUS: IN PROGRESS
 - [x] AC-M07-4: Tampering with any byte of the ciphertext causes decryption to fail (signature covers fields 1–7 including encrypted payload)
 - [x] AC-M07-5: Protocol version field is present and validated on receive; version 999 returns `ProtocolError.UnknownVersion`
 - [x] AC-M07-6: Message serialization uses protobuf (`kotlinx-serialization-protobuf`); binary output verified not to start with `{`
-
-> **Pending sign-off:** `./gradlew :shared:jvmTest` must pass before advancing to COMPLETE.
 
 ## Implementation Notes
 
@@ -25,6 +23,6 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date | Engineer | Notes |
-|------|----------|-------|
-|      |          |       |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-11 | Claude Code | `./gradlew :shared:jvmTest` BUILD SUCCESSFUL — all MessageProtocolTest cases pass. Full E2E verified via `./gradlew :integration-tests:test` (AliceToBobIntegrationTest, GroupMessageIntegrationTest). |

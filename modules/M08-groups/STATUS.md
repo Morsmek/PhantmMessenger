@@ -1,6 +1,6 @@
 # M08 — Groups Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -9,8 +9,6 @@ STATUS: IN PROGRESS
 - [x] AC-M08-3: Member removal triggers key rotation; removed member's envelope not included; old key cannot decrypt messages encrypted with new key; `removedMemberCannotDecryptNewMessages` verifies `DecryptionFailed` result
 - [x] AC-M08-4: 3-member group message round-trip: Alice creates group → Bob + Carol receive key envelopes → Alice encrypts → Bob decrypts → Carol decrypts; `groupMessageRoundTrip_threeMembers` verified with real libsodium crypto and in-memory SQLite
 - [x] AC-M08-5: Group state (id, name, keyVersion, groupKey, membership) persisted via SQLDelight `groups` + `group_members` tables; `groupState_persistedAcrossManagerInstances` verifies second manager instance reads same DB state
-
-> **Pending sign-off:** `./gradlew :shared:jvmTest` before advancing to COMPLETE.
 
 ## Implementation Notes
 
@@ -22,6 +20,6 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date | Engineer | Notes |
-|------|----------|-------|
-|      |          |       |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-11 | Claude Code | `./gradlew :shared:jvmTest` BUILD SUCCESSFUL — all GroupManagerTest cases pass. Full 3-participant E2E verified via `./gradlew :integration-tests:test` (GroupMessageIntegrationTest — Alice creates group, Bob+Carol join, all decrypt; member removal test verified). |

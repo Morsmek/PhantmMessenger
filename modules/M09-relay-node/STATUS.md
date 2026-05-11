@@ -1,6 +1,6 @@
 # M09 — Relay Node Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -11,8 +11,6 @@ STATUS: IN PROGRESS
 - [x] AC-M09-5: Cover traffic (`COVER_RECIPIENT_ID = "__phantm_cover__"`) discarded silently, no logging; `coverTraffic_notStored_notRouted` verified
 - [x] AC-M09-6: Relay does not log client IP addresses; `ConnectionRegistry` stores only `recipientId → session`; no `remoteHost` calls anywhere; `connectionRegistry_doesNotStoreIpAddresses` structural test verified
 
-> **Pending sign-off:** `./gradlew :relay:test` before advancing to COMPLETE. Also closes **M06-AC-M06-3**.
-
 ## Implementation Notes
 
 - **Wire protocol**: Binary protobuf `RelayFrame(recipientId, envelopeBytes)` — byte-compatible with shared `TransportFrame` (same `@ProtoNumber` assignments); registration = frame with empty `envelopeBytes`
@@ -22,6 +20,6 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date | Engineer | Notes |
-|------|----------|-------|
-|      |          |       |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-11 | Claude Code | `./gradlew :relay:test` BUILD SUCCESSFUL — RelayServerTest (envelope_deliveredToConnectedRecipient, envelope_storedForOfflineRecipient_deliveredOnConnect, offlineEnvelope_ttlBounded, coverTraffic_notStored_notRouted, connectionRegistry_doesNotStoreIpAddresses) all pass. Also closes M06-AC-M06-3. |

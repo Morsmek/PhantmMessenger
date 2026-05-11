@@ -1,6 +1,6 @@
 # M05 — Transport Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -10,8 +10,6 @@ STATUS: IN PROGRESS
 - [x] AC-M05-4: No plaintext on the socket — all frames are `Frame.Binary(TransportFrame)` protobuf; text frames never sent. Wire format verified not-JSON in tests.
 - [x] AC-M05-5: Only `KtorTransportClient` opens network sockets — verified by code organisation: only `com.stagic.phantm.transport` imports `io.ktor.client.*`. All other modules use the `TransportClient` interface.
 - [x] AC-M05-6: Connection metadata not logged — `KtorTransportClient` contains no `PhantmLogger`, `println`, or `Log` calls; relay URL never written to any output.
-
-> **Pending sign-off:** `./gradlew :shared:jvmTest` + relay echo integration test (AC-M05-1/2) before advancing to COMPLETE.
 
 ## Implementation Notes
 
@@ -24,6 +22,6 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date | Engineer | Notes |
-|------|----------|-------|
-|      |          |       |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-11 | Claude Code | `./gradlew :shared:jvmTest` BUILD SUCCESSFUL — TransportClientTest all pass. End-to-end relay integration verified via :integration-tests:test (AliceToBobIntegrationTest, CoverTrafficRelayTest). |

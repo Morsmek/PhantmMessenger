@@ -1,6 +1,6 @@
 # M14 — Integration Tests Status
 
-STATUS: IN PROGRESS
+STATUS: COMPLETE
 
 ## Acceptance Criteria
 
@@ -12,6 +12,7 @@ STATUS: IN PROGRESS
 
 ## Sign-off Log
 
-| Date       | Engineer    | Notes                                                                                  |
-|------------|-------------|----------------------------------------------------------------------------------------|
-| 2026-05-10 | Claude Code | :integration-tests subproject created; FakeTransportClient + InMemoryRelay helpers; AliceToBobIntegrationTest (M14-1), GroupMessageIntegrationTest (M14-2), PanicWipeIntegrationTest (M14-3), CoverTrafficRelayTest (M14-4), AllModuleUnitTestsVerificationTest (M14-5). Awaiting CI run: ./gradlew :integration-tests:test |
+| Date       | Engineer    | Notes |
+|------------|-------------|-------|
+| 2026-05-10 | Claude Code | :integration-tests subproject created; FakeTransportClient + InMemoryRelay helpers; AliceToBobIntegrationTest (M14-1), GroupMessageIntegrationTest (M14-2), PanicWipeIntegrationTest (M14-3), CoverTrafficRelayTest (M14-4), AllModuleUnitTestsVerificationTest (M14-5). |
+| 2026-05-11 | Claude Code | `./gradlew :integration-tests:test` BUILD SUCCESSFUL — all 13 integration tests pass. Fixed FakeTransportClient SharedFlow replay, CoverTrafficRelayTest real-time dispatcher, and test classpath for AllModuleUnitTestsVerificationTest. |
