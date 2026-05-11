@@ -1,5 +1,6 @@
 package com.stagic.phantm.android.ui.conversation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,143 +9,217 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.stagic.phantm.android.R
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.stagic.phantm.android.ui.components.NavTab
+import com.stagic.phantm.android.ui.components.PhantmAvatar
+import com.stagic.phantm.android.ui.components.PhantmBottomNav
+import com.stagic.phantm.android.ui.components.PhantmDividerLine
+import com.stagic.phantm.android.ui.components.PhantmWordmark
+import com.stagic.phantm.android.ui.components.UnreadBadge
+import com.stagic.phantm.android.ui.theme.PhantmAccent
+import com.stagic.phantm.android.ui.theme.PhantmBgBase
+import com.stagic.phantm.android.ui.theme.PhantmBgElevated
+import com.stagic.phantm.android.ui.theme.PhantmDivider
+import com.stagic.phantm.android.ui.theme.PhantmSuccess
+import com.stagic.phantm.android.ui.theme.PhantmText
+import com.stagic.phantm.android.ui.theme.PhantmText2
+import com.stagic.phantm.android.ui.theme.PhantmTextDisabled
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConversationListScreen(
     onConversationClick: (contactId: String) -> Unit,
-    viewModel: ConversationListViewModel = viewModel(),
+    onNewChat: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
 ) {
+    val viewModel: ConversationListViewModel = viewModel()
     val conversations by viewModel.conversations.collectAsState()
 
     Scaffold(
-        topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.screen_conversations)) })
+        containerColor = PhantmBgBase,
+        bottomBar = {
+            PhantmBottomNav(activeTab = NavTab.CHATS, chatBadge = conversations.sumOf { it.unreadCount }, onTabSelected = { tab ->
+                if (tab == NavTab.SETTINGS) onSettingsClick()
+            })
         },
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
         ) {
-            items(conversations, key = { it.contactId }) { conversation ->
-                ConversationRow(
-                    state = conversation,
-                    onClick = { onConversationClick(conversation.contactId) },
-                )
-                Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            Column(modifier = Modifier.fillMaxSize()) {
+                // App bar
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    PhantmWordmark()
+                    Spacer(Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .clickable { },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text("🔍", fontSize = 18.sp)
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .clickable { onNewChat() },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text("✏️", fontSize = 18.sp)
+                    }
+                }
+
+                // Cover traffic pill
+                CoverTrafficPill(on = true)
+
+                // Conversation list
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(conversations, key = { it.contactId }) { conv ->
+                        ConversationRow(conv = conv, onClick = { onConversationClick(conv.contactId) })
+                        PhantmDividerLine()
+                    }
+                    item { Spacer(Modifier.height(80.dp)) }
+                }
+            }
+
+            // FAB
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 80.dp)
+                    .size(56.dp)
+                    .shadow(elevation = 8.dp, shape = CircleShape)
+                    .clip(CircleShape)
+                    .background(PhantmAccent)
+                    .clickable { onNewChat() },
+                contentAlignment = Alignment.Center,
+            ) {
+                Text("✏️", fontSize = 20.sp)
             }
         }
     }
 }
 
 @Composable
-private fun ConversationRow(state: ConversationUiState, onClick: () -> Unit) {
-    val rowDesc = stringResource(R.string.cd_conversation_row, state.displayName, state.unreadCount)
+private fun CoverTrafficPill(on: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClickLabel = stringResource(R.string.cd_open_conversation, state.displayName)) { onClick() }
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .semantics { contentDescription = rowDesc },
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(PhantmBgElevated)
+            .clickable { }
+            .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        AvatarCircle(name = state.displayName)
-        Spacer(Modifier.width(12.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = state.displayName,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f),
-                )
-                Text(
-                    text = formatTimestamp(state.timestampMs),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                if (state.isEncrypted) {
-                    Icon(
-                        imageVector = Icons.Default.Lock,
-                        contentDescription = stringResource(R.string.cd_encrypted),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(12.dp),
-                    )
-                }
-                Text(
-                    text = state.lastMessage,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    maxLines = 1,
-                )
-            }
-        }
-        if (state.unreadCount > 0) {
-            Spacer(Modifier.width(8.dp))
-            Badge(
-                containerColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.semantics { contentDescription = stringResource(R.string.cd_unread_count, state.unreadCount) },
-            ) {
-                Text(state.unreadCount.toString(), style = MaterialTheme.typography.labelSmall)
-            }
-        }
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .clip(CircleShape)
+                .background(if (on) PhantmSuccess else PhantmTextDisabled),
+        )
+        Text(
+            text = "Cover Traffic: ${if (on) "ON" else "OFF"}",
+            color = if (on) PhantmSuccess else PhantmText2,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+        )
+        Spacer(Modifier.weight(1f))
+        Text(text = "3 chats secured", color = PhantmText2, fontSize = 12.sp)
+        Text("›", color = PhantmText2, fontSize = 14.sp)
     }
 }
 
 @Composable
-private fun AvatarCircle(name: String) {
-    val initial = name.firstOrNull()?.uppercaseChar() ?: '?'
-    Surface(
-        shape = CircleShape,
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+private fun ConversationRow(conv: ConversationUiState, onClick: () -> Unit) {
+    Row(
         modifier = Modifier
-            .size(48.dp)
-            .semantics { contentDescription = name },
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = initial.toString(),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
+        PhantmAvatar(name = conv.displayName, size = 48.dp, online = conv.isOnline)
+
+        Column(modifier = Modifier.weight(1f)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Text(
+                    text = conv.displayName,
+                    color = PhantmText,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(1f, fill = false),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                if (conv.isEncrypted) {
+                    Text("🔒", fontSize = 11.sp)
+                }
+                if (conv.hasTimer) {
+                    Text("⏱", fontSize = 11.sp)
+                }
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = conv.formattedTime,
+                    color = PhantmText2,
+                    fontSize = 12.sp,
+                )
+            }
+            Spacer(Modifier.height(2.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Text(
+                    text = conv.lastMessage,
+                    color = if (conv.isGhostMessage) PhantmTextDisabled else PhantmText2,
+                    fontSize = 14.sp,
+                    fontStyle = if (conv.isGhostMessage) FontStyle.Italic else FontStyle.Normal,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                )
+                if (conv.unreadCount > 0) {
+                    UnreadBadge(conv.unreadCount)
+                }
+            }
         }
     }
 }
-
-private fun formatTimestamp(ms: Long): String =
-    SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))

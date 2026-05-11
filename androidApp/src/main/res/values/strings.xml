@@ -3,31 +3,53 @@
     <string name="app_name">Phantm</string>
 
     <!-- Screen titles -->
-    <string name="screen_conversations">Conversations</string>
+    <string name="screen_conversations">Chats</string>
     <string name="screen_settings">Settings</string>
     <string name="screen_verify_contact">Verify %1$s</string>
+    <string name="screen_new_chat">New Chat</string>
+    <string name="screen_my_id">My Phantm ID</string>
+
+    <!-- Onboarding -->
+    <string name="onboard_identity_cta">Generate Identity</string>
+    <string name="onboard_backup_cta">I\'ve Written It Down</string>
+    <string name="onboard_backup_skip">Skip for Now</string>
+    <string name="onboard_name_cta">Enter Phantm</string>
+    <string name="splash_loading">Initialising secure vault…</string>
 
     <!-- E2E encryption status -->
     <string name="e2e_verified">End-to-end encrypted · verified</string>
     <string name="e2e_unverified">End-to-end encrypted · unverified</string>
 
     <!-- Contact verification screen -->
-    <string name="verify_instruction">Scan this QR code with your contact's device or compare the fingerprint out-of-band to verify their identity.</string>
+    <string name="verify_instruction">Scan this QR code with your contact\'s device or compare the fingerprint out-of-band to verify their identity.</string>
     <string name="fingerprint_label">Ed25519 Public Key Fingerprint</string>
     <string name="mark_verified">Mark as Verified</string>
+    <string name="verify_later">Verify Later</string>
     <string name="contact_verified">Identity Verified</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="verify_and_add">Verify &amp; Add</string>
+    <string name="copy_id">Copy ID</string>
+    <string name="qr_footer">Ask contacts to scan this to connect with you securely. Your ID never leaves your device.</string>
 
     <!-- Settings section headers -->
     <string name="settings_section_transport">Transport</string>
+    <string name="settings_section_privacy">Privacy</string>
     <string name="settings_section_security">Security</string>
+    <string name="settings_section_notifications">Notifications</string>
+    <string name="settings_section_about">About</string>
 
-    <!-- Settings toggle labels -->
+    <!-- Settings -->
     <string name="setting_cover_traffic">Cover Traffic</string>
-    <string name="setting_cover_traffic_desc">Send constant-rate dummy packets to obscure message timing</string>
+    <string name="setting_cover_traffic_desc">Decoy packets prevent traffic analysis</string>
     <string name="setting_mesh_networking">Mesh Networking</string>
     <string name="setting_mesh_networking_desc">Enable offline peer-to-peer delivery via BLE / Wi-Fi Direct</string>
     <string name="setting_decoy_mode">Decoy Mode</string>
     <string name="setting_decoy_mode_desc">Present an empty app instance for plausible deniability</string>
+
+    <!-- Panic wipe -->
+    <string name="panic_wipe_btn">Wipe Everything</string>
+    <string name="panic_wipe_countdown">Wipe Everything (%1$d)</string>
+    <string name="panic_cancel">Cancel</string>
 
     <!-- Accessibility content descriptions -->
     <string name="cd_back">Navigate back</string>
@@ -41,4 +63,7 @@
     <string name="cd_fingerprint_text">Fingerprint: %1$s</string>
     <string name="cd_contact_verified">Contact identity verified</string>
     <string name="cd_mark_verified_button">Mark contact as verified</string>
+    <string name="cd_send_message">Send message</string>
+    <string name="cd_record_voice">Record voice message</string>
+    <string name="cd_new_chat">New chat</string>
 </resources>
